@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Methodology | Farnham Ancestry Blog</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --fg: #000000;
+            --line: #000000;
+            --line-soft: #e5e5e5;
+            --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg);
+            color: var(--fg);
+            line-height: 1.4;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HEADER --- */
+        header {
+            border-bottom: 1px solid var(--line);
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 54px;
+            padding: 0 20px;
+        }
+
+        .brand {
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--fg);
+        }
+
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--fg);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* --- BLOG HERO --- */
+        .blog-hero {
+            border-bottom: 1px solid var(--line);
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .blog-hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            line-height: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .blog-hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.8;
+        }
+
+        /* --- BLOG FEED --- */
+        .feed-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .post-card {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 40px;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--line-soft);
+            text-decoration: none;
+            color: inherit;
+            transition: 0.2s;
+        }
+
+        .post-card:hover h2 {
+            text-decoration: underline;
+        }
+
+        .post-meta {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: #888;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .post-meta span { color: var(--fg); font-weight: bold; }
+
+        .post-content h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -0.02em;
+        }
+
+        .post-content p {
+            font-size: 1.05rem;
+            line-height: 1.5;
+            color: #444;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .read-more {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- GITHUB FOOTER BAR --- */
+        .github-bar {
+            background: var(--fg);
+            color: var(--bg);
+            padding: 20px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .github-bar a {
+            color: inherit;
+            font-weight: 900;
+            text-decoration: underline;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 60px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            .blog-hero h1 { font-size: 3rem; }
+            .post-card { grid-template-columns: 1fr; gap: 15px; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="indexfarnhamancestry.html" class="brand">FARNHAM ANCESTRY</a>
+            <nav class="nav-links">
+                <a href="indexfarnhamancestry.html#finder">Tree Finder</a>
+                <a href="indexfarnhamancestry.html#digital">Digital Shop</a>
+                <a href="indexfarnhamancestry.html#blog">Blog</a>
+                <a href="mailto:hello@farnhamancestry.com" style="border: 1px solid #000; padding: 4px 10px;">Free 20m Call</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="blog-hero">
+        <p class="post-meta" style="margin-bottom: 10px;">Archives / Methodology</p>
+        <h1>The Research Blog</h1>
+        <p>Technical papers, field notes, and case studies on British lineage and record retrieval.</p>
+    </section>
+
+    <main class="feed-container">
+        
+        <!-- ARTICLE 1 -->
+        <a href="blog-census-gaps.html" class="post-card">
+            <div class="post-meta">
+                <span>MAR 24, 2024</span>
+                LOG-01<br>
+                5 MIN READ
+            </div>
+            <div class="post-content">
+                <h2>Finding the Gaps in the 1871 Census</h2>
+                <p>The 1871 England and Wales Census is a cornerstone of Victorian research, yet thousands of individuals remain "missing" due to systematic enumeration errors. We explore the water-damaged schedules and tenements that hide your ancestors.</p>
+                <div class="read-more">Read Full Paper &rarr;</div>
+            </div>
+        </a>
+
+        <!-- ARTICLE 2 -->
+        <a href="#" class="post-card">
+            <div class="post-meta">
+                <span>FEB 12, 2024</span>
+                LOG-02<br>
+                12 MIN READ
+            </div>
+            <div class="post-content">
+                <h2>The Norfolk 'Ag Lab' Study</h2>
+                <p>A deep dive into the migratory patterns of agricultural labourers in East Anglia during the 19th-century depression. Includes data visualizations of movement between Diss and Great Yarmouth.</p>
+                <div class="read-more">Read Full Paper &rarr;</div>
+            </div>
+        </a>
+
+        <!-- ARTICLE 3 -->
+        <a href="#" class="post-card">
+            <div class="post-meta">
+                <span>JAN 05, 2024</span>
+                LOG-03<br>
+                8 MIN READ
+            </div>
+            <div class="post-content">
+                <h2>DNA Triangulation for Beginners</h2>
+                <p>Moving beyond basic matches. How to use segment data and shared matching to confirm a 4th-great-grandparent without a paper trail. Standardizing the Leeds Method.</p>
+                <div class="read-more">Read Full Paper &rarr;</div>
+            </div>
+        </a>
+
+        <!-- ARTICLE 4 -->
+        <a href="#" class="post-card">
+            <div class="post-meta">
+                <span>DEC 18, 2023</span>
+                LOG-04<br>
+                15 MIN READ
+            </div>
+            <div class="post-content">
+                <h2>Victorian Workhouse Data Retrieval</h2>
+                <p>Accessing the unindexed: A guide to the admission and discharge books of the St. Pancras workhouse and their digital availability in local archives.</p>
+                <div class="read-more">Read Full Paper &rarr;</div>
+            </div>
+        </a>
+
+    </main>
+
+    <div class="github-bar">
+        Source code for this research suite is available at 
+        <a href="https://github.com/farnhamancestry-ux/familytreefinder">github.com/farnhamancestry-ux/familytreefinder</a>
+    </div>
+
+    <footer>
+        <div>
+            &copy; 2024 Farnham Ancestry / Family Tree Finder.<br>
+            Systematic heritage research for the digital age.
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/farnhamancestry-ux/familytreefinder">GitHub</a>
+            <a href="#">WikiTree</a>
+            <a href="mailto:hello@farnhamancestry.com">Contact</a>
+        </div>
+    </footer>
+
+</body>
+</html>
