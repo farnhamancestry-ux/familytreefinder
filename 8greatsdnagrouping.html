@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA Match Story | Interactive 8 Greats</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --fg: #000000;
+            --line: #000000;
+            --line-soft: #e5e5e5;
+            /* Ancestry-style color codes for grouping */
+            --color-p1: #4A90E2; /* Blue - Paternal Paternal */
+            --color-p2: #F5A623; /* Orange - Paternal Maternal */
+            --color-m1: #7ED321; /* Green - Maternal Paternal */
+            --color-m2: #D0021B; /* Red - Maternal Maternal */
+            --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-main); background-color: var(--bg); color: var(--fg); line-height: 1.4; -webkit-font-smoothing: antialiased; }
+
+        .label-mono { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; font-weight: bold; display: block; margin-bottom: 5px; color: #888; }
+        .section-container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
+
+        /* --- HEADER --- */
+        header { border-bottom: 1px solid var(--line); padding: 15px 20px; background: var(--bg); position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center;}
+        .brand { font-weight: 900; text-transform: uppercase; font-size: 0.8rem; letter-spacing: -0.02em; }
+
+        /* --- 8 GREATS GRID --- */
+        .matrix-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-bottom: 20px; }
+        
+        .matrix-cell { 
+            background: #fff;
+            padding: 20px; 
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            min-height: 120px;
+        }
+        
+        .matrix-cell:hover { background: #f9f9f9; }
+        .matrix-cell.active { background: #000; color: #fff; }
+        .matrix-cell.active .label-mono { color: #888; }
+
+        /* Color Bars */
+        .color-bar { height: 6px; width: 100%; position: absolute; top: 0; left: 0; opacity: 0.3; }
+        .matrix-cell.active .color-bar { opacity: 1; }
+        
+        .c-p1 .color-bar { background: var(--color-p1); }
+        .c-p2 .color-bar { background: var(--color-p2); }
+        .c-m1 .color-bar { background: var(--color-m1); }
+        .c-m2 .color-bar { background: var(--color-m2); }
+
+        .matrix-cell h4 { font-size: 0.9rem; text-transform: uppercase; font-weight: 900; margin-top: 15px; line-height: 1.1; }
+        .active-indicator { position: absolute; bottom: 15px; right: 15px; font-family: var(--font-mono); font-size: 0.5rem; border: 1px solid #fff; padding: 2px 4px; display: none; }
+        .matrix-cell.active .active-indicator { display: block; }
+
+        /* --- CONTENT AREA --- */
+        .content-wrap { display: grid; grid-template-columns: 350px 1fr; gap: 60px; border-top: 1px solid var(--line); padding-top: 40px; }
+        
+        /* Logic & Notes */
+        .logic-panel { background: #fcfcfc; border: 1px solid var(--line-soft); padding: 25px; margin-bottom: 30px; }
+        .logic-panel h5 { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid var(--line-soft); padding-bottom: 10px; }
+        .logic-panel p { font-size: 0.85rem; color: #444; margin-bottom: 15px; }
+
+        /* Story Text */
+        .story-text h2 { font-size: 3.5rem; font-weight: 900; text-transform: uppercase; line-height: 0.85; letter-spacing: -0.05em; margin-bottom: 25px; }
+        .story-text p { font-size: 1.1rem; margin-bottom: 20px; color: #222; max-width: 800px; }
+
+        /* --- TABLE --- */
+        .table-wrap { margin-top: 40px; border: 1px solid var(--line); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th { background: #000; color: #fff; text-align: left; padding: 12px; font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; position: sticky; top: 0; }
+        td { padding: 12px; border-bottom: 1px solid var(--line-soft); }
+        
+        .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 10px; }
+        .badge { font-family: var(--font-mono); font-size: 0.6rem; padding: 2px 5px; border: 1px solid #ddd; text-transform: uppercase; font-weight: bold; }
+
+        @media (max-width: 1024px) {
+            .matrix-grid { grid-template-columns: repeat(2, 1fr); }
+            .content-wrap { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">Farnham Ancestry / 8 Greats Explorer</div>
+        <div class="label-mono" style="margin:0;">Interactive DNA Dashboard</div>
+    </header>
+
+    <main class="section-container">
+        
+        <!-- INTERACTIVE GRID -->
+        <div class="matrix-grid" id="greatsGrid">
+            <!-- Paternal 1 -->
+            <div class="matrix-cell c-p1 active" data-group="p1">
+                <div class="color-bar"></div>
+                <span class="label-mono">Paternal Paternal</span>
+                <h4>Farnham / <br>Holloway</h4>
+                <div class="active-indicator">SELECTED</div>
+            </div>
+            <!-- Paternal 2 -->
+            <div class="matrix-cell c-p2" data-group="p2">
+                <div class="color-bar"></div>
+                <span class="label-mono">Paternal Maternal</span>
+                <h4>Miller / <br>Agnew</h4>
+                <div class="active-indicator">SELECTED</div>
+            </div>
+            <!-- Maternal 1 -->
+            <div class="matrix-cell c-m1" data-group="m1">
+                <div class="color-bar"></div>
+                <span class="label-mono">Maternal Paternal</span>
+                <h4>Smithson / <br>Vane</h4>
+                <div class="active-indicator">SELECTED</div>
+            </div>
+            <!-- Maternal 2 -->
+            <div class="matrix-cell c-m2" data-group="m2">
+                <div class="color-bar"></div>
+                <span class="label-mono">Maternal Maternal</span>
+                <h4>Baxter / <br>Gleeson</h4>
+                <div class="active-indicator">SELECTED</div>
+            </div>
+            
+            <!-- Second Row -->
+            <div class="matrix-cell c-p1" data-group="p3">
+                <div class="color-bar"></div>
+                <span class="label-mono">Paternal Paternal</span>
+                <h4>Rowe / <br>O'Reilly</h4>
+                <div class="active-indicator">SELECTED</div>
+            </div>
+            <div class="matrix-cell c-p2" data-group="p4">
+                <div class="color-bar"></div>
+                <span class="label-mono">Paternal Maternal</span>
+                <h4>White / <br>Stark</h4>
+                <div class="active-indicator">SELECTED</div>
+            </div>
+            <div class="matrix-cell c-m1" data-group="m3">
+                <div class="color-bar"></div>
+                <span class="label-mono">Maternal Paternal</span>
+                <h4>Lynch / <br>Murray</h4>
+                <div class="active-indicator">SELECTED</div>
+            </div>
+            <div class="matrix-cell c-m2" data-group="m4">
+                <div class="color-bar"></div>
+                <span class="label-mono">Maternal Maternal</span>
+                <h4>Cheney / <br>Douglas</h4>
+                <div class="active-indicator">SELECTED</div>
+            </div>
+        </div>
+
+        <div class="content-wrap">
+            <!-- Sidebar: Logic & Notes -->
+            <aside>
+                <div class="logic-panel">
+                    <h5>Grouping Methodology</h5>
+                    <p id="logicText">Loading analysis for the Farnham / Holloway cluster...</p>
+                    
+                    <h5>Criteria Met</h5>
+                    <div id="criteriaTags">
+                        <span class="badge">Leads Confirmed</span>
+                        <span class="badge">15cM+ Threshold</span>
+                    </div>
+                </div>
+
+                <div style="padding: 20px 0;">
+                    <span class="label-mono">Ancestry Sync Code</span>
+                    <div style="display: flex; align-items: center; margin-top: 10px;">
+                        <span id="syncDot" class="dot" style="background: var(--color-p1);"></span>
+                        <span id="syncText" style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: bold; text-transform: uppercase;">Blue (Pat-Pat)</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Story & Table -->
+            <section>
+                <div class="story-text">
+                    <span class="label-mono" id="groupSubtitle">Cluster 8G-001 Analysis</span>
+                    <h2 id="storyTitle">The Founding <br>Farnhams.</h2>
+                    <p id="storyContent">Researching the paternal line identifies a cluster of 145 matches triangulating to the Farnham/Holloway marriage in 1845. This confirms the Sussex origin point before the family moved north.</p>
+                </div>
+
+                <div class="table-wrap">
+                    <div style="background: #f9f9f9; padding: 10px 15px; border-bottom: 1px solid #000; display: flex; justify-content: space-between;">
+                        <span class="label-mono" style="margin:0;">Match Cluster Data</span>
+                        <span class="label-mono" style="margin:0;" id="matchCount">145 Total Matches</span>
+                    </div>
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table id="matchTable">
+                            <thead>
+                                <tr>
+                                    <th>Ref</th>
+                                    <th>Username</th>
+                                    <th>Shared cM</th>
+                                    <th>Confidence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // DATA MODEL: You can expand this with your real research data
+        const groupData = {
+            p1: {
+                title: "The Founding <br>Farnhams.",
+                subtitle: "Cluster 8G-001 Analysis",
+                color: "var(--color-p1)",
+                syncName: "Blue (Pat-Pat)",
+                logic: "Matches identified through the Farnham side-chain. 145 individuals triangulated using the Sussex Parish records as a baseline.",
+                content: "This cluster confirms the deep roots of the Farnham line in Southern England. The shared DNA spans five generations of descendants from the 1845 union.",
+                matches: 145,
+                rows: [
+                    ["A1", "Farnham_Smyth", "214 cM", "High"],
+                    ["A2", "TreeWalker44", "88 cM", "Confirmed"],
+                    ["A3", "Sussex_DNA", "42 cM", "Likely"]
+                ]
+            },
+            p2: {
+                title: "The Agnew <br>Connection.",
+                subtitle: "Cluster 8G-002 Analysis",
+                color: "var(--color-p2)",
+                syncName: "Orange (Pat-Mat)",
+                logic: "Determined via the Agnew-Miller crossover. Absence of Farnham DNA markers confirms this as a distinct maternal line for your father.",
+                content: "These 214 matches represent the 'lost' Agnew branch. By isolating the Orange cluster, we've successfully mapped the migration from Norfolk to the Colonies.",
+                matches: 214,
+                rows: [
+                    ["B1", "MillerTime_77", "186 cM", "High"],
+                    ["B2", "Agnew_Descendant", "112 cM", "High"],
+                    ["B3", "Ontario_Miller", "45 cM", "Confirmed"]
+                ]
+            },
+            // Add other groups (m1, m2, etc.) following the same pattern
+        };
+
+        const cells = document.querySelectorAll('.matrix-cell');
+        const logicText = document.getElementById('logicText');
+        const storyTitle = document.getElementById('storyTitle');
+        const storyContent = document.getElementById('storyContent');
+        const groupSubtitle = document.getElementById('groupSubtitle');
+        const syncDot = document.getElementById('syncDot');
+        const syncText = document.getElementById('syncText');
+        const matchCount = document.getElementById('matchCount');
+        const matchTableBody = document.querySelector('#matchTable tbody');
+
+        function updateUI(groupId) {
+            const data = groupData[groupId] || groupData['p1']; // Default to p1 if not defined
+
+            // Update Header & Story
+            storyTitle.innerHTML = data.title;
+            storyContent.innerText = data.content;
+            groupSubtitle.innerText = data.subtitle;
+            logicText.innerText = data.logic;
+            
+            // Update Sync
+            syncDot.style.background = data.color;
+            syncText.innerText = data.syncName;
+            matchCount.innerText = `${data.matches} Total Matches`;
+
+            // Update Table
+            matchTableBody.innerHTML = '';
+            data.rows.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span class="label-mono">${row[0]}</span></td>
+                    <td><strong>${row[1]}</strong></td>
+                    <td><span class="badge" style="border-color:${data.color}">${row[2]}</span></td>
+                    <td>${row[3]}</td>
+                `;
+                matchTableBody.appendChild(tr);
+            });
+            
+            // Add a "placeholder" for the rest of the 200 matches
+            const footerRow = document.createElement('tr');
+            footerRow.style.opacity = '0.5';
+            footerRow.innerHTML = `<td colspan="4" style="text-align:center; padding: 20px;">+ ${data.matches - 3} Additional Matches filtered in this cluster</td>`;
+            matchTableBody.appendChild(footerRow);
+        }
+
+        cells.forEach(cell => {
+            cell.addEventListener('click', () => {
+                // Remove active class from all
+                cells.forEach(c => c.classList.remove('active'));
+                // Add to clicked
+                cell.classList.add('active');
+                
+                const group = cell.getAttribute('data-group');
+                updateUI(group);
+            });
+        });
+
+        // Initialize with first group
+        updateUI('p1');
+    </script>
+</body>
+</html>
