@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Report | Farnham Ancestry Dossier</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --fg: #000000;
+            --line: #000000;
+            --line-soft: #e5e5e5;
+            --accent: #f9f9f9;
+            --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg);
+            color: var(--fg);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 100px;
+        }
+
+        /* --- HEADER --- */
+        header {
+            border-bottom: 1px solid var(--line);
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 54px;
+            padding: 0 20px;
+        }
+
+        .brand {
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--fg);
+        }
+
+        .report-meta-header {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        /* --- DOSSIER COVER SECTION --- */
+        .dossier-cover {
+            border-bottom: 1px solid var(--line);
+            padding: 80px 20px;
+            background: var(--accent);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .label-mono {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: block;
+            color: #666;
+        }
+
+        .report-title {
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            line-height: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            border-top: 1px solid var(--line);
+            padding-top: 20px;
+        }
+
+        .meta-item h4 {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .meta-item p {
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        /* --- CONTENT BLOCKS --- */
+        section.report-section {
+            border-bottom: 1px solid var(--line);
+            padding: 60px 20px;
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 60px;
+        }
+
+        .section-sidebar h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            position: sticky;
+            top: 100px;
+        }
+
+        .content-body h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .content-body p {
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+
+        /* --- FINDINGS TABLE --- */
+        .evidence-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-size: 0.9rem;
+        }
+
+        .evidence-table th {
+            text-align: left;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--line);
+            padding: 10px 0;
+            color: #888;
+        }
+
+        .evidence-table td {
+            padding: 15px 10px 15px 0;
+            border-bottom: 1px solid var(--line-soft);
+            vertical-align: top;
+        }
+
+        .evidence-table tr:last-child td { border-bottom: none; }
+
+        .tag-ref {
+            font-family: var(--font-mono);
+            background: #000;
+            color: #fff;
+            padding: 2px 6px;
+            font-size: 0.65rem;
+            font-weight: bold;
+        }
+
+        /* --- CALLOUT BOX --- */
+        .callout {
+            background: #000;
+            color: #fff;
+            padding: 40px;
+            margin: 40px 0;
+        }
+
+        .callout h4 {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            color: #aaa;
+        }
+
+        .callout p {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 0;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 60px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #888;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .section-grid { grid-template-columns: 1fr; gap: 20px; }
+            .meta-grid { grid-template-columns: 1fr 1fr; }
+            .report-title { font-size: 3rem; }
+        }
+
+        @media print {
+            header, .no-print { display: none; }
+            body { padding-bottom: 0; }
+            .dossier-cover { background: white; border: 2px solid #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="brand">FARNHAM ANCESTRY</a>
+            <div class="report-meta-header">Internal Dossier / Case Ref: #2024-SPR-082</div>
+        </div>
+    </header>
+
+    <!-- DOSSIER COVER -->
+    <section class="dossier-cover">
+        <div class="container">
+            <span class="label-mono">Research Sprint Report</span>
+            <h1 class="report-title">The Miller Lineage: <br>Norfolk & Suffolk Branch</h1>
+            
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <h4>Client</h4>
+                    <p>Sample Client Name</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Date Delivered</h4>
+                    <p>October 24, 2024</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Sprint Duration</h4>
+                    <p>4 Hours (Standard)</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Investigator</h4>
+                    <p>Farnham Ancestry</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESEARCH OBJECTIVES -->
+    <section class="report-section">
+        <div class="container section-grid">
+            <div class="section-sidebar">
+                <h3>01 / The Brief</h3>
+            </div>
+            <div class="content-body">
+                <h2>Objectives & Methodology</h2>
+                <p>The primary goal of this 4-hour sprint was to resolve the "Brick Wall" concerning <strong>Thomas Miller (b. 1842)</strong> and identify his parents using a combination of GRO indexes and local parish transcriptions.</p>
+                <p>We employed a systematic sweep of the 1851-1881 Censuses and cross-referenced results with the Norfolk Record Office's digital collection. All findings are documented below with standard genealogical citations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE FINDINGS -->
+    <section class="report-section">
+        <div class="container section-grid">
+            <div class="section-sidebar">
+                <h3>02 / Evidence</h3>
+            </div>
+            <div class="content-body">
+                <h2>Verified Records Located</h2>
+                
+                <table class="evidence-table">
+                    <thead>
+                        <tr>
+                            <th>Ref Code</th>
+                            <th>Year</th>
+                            <th>Record Type</th>
+                            <th>Details Located</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag-ref">REF-01</span></td>
+                            <td>1842</td>
+                            <td>Birth Registration</td>
+                            <td>Thomas Miller. District: Erpingham. Mother's Maiden Name: <strong>Howlett</strong>.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag-ref">REF-02</span></td>
+                            <td>1865</td>
+                            <td>Marriage Cert</td>
+                            <td>Thomas Miller to Sarah Ann Smith. Father listed as <strong>Robert Miller (Laborer)</strong>.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag-ref">REF-03</span></td>
+                            <td>1881</td>
+                            <td>Census Return</td>
+                            <td>Household in Aylsham. Thomas (Head), 39, Ag Lab. 4 children listed.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="callout">
+                    <h4>Key Breakthrough</h4>
+                    <p>The identification of 'Howlett' as the mother's maiden name in the GRO index allows us to move back another generation to the marriage of Robert Miller and Elizabeth Howlett (1838).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUMMARY & NEXT STEPS -->
+    <section class="report-section">
+        <div class="container section-grid">
+            <div class="section-sidebar">
+                <h3>03 / Conclusion</h3>
+            </div>
+            <div class="content-body">
+                <h2>Summary of Sprint</h2>
+                <p>We successfully pushed the Miller line back to 1810. We have confirmed the parental link for Thomas Miller, resolving the ambiguity caused by the three different "Thomas Millers" born in Norfolk in 1842.</p>
+                
+                <h2 style="margin-top: 40px;">Recommended Next Steps</h2>
+                <ul style="list-style: none;">
+                    <li style="margin-bottom: 15px; border-left: 2px solid #000; padding-left: 20px;">
+                        <span class="label-mono">Priority 1</span>
+                        <strong>Manorial Record Search:</strong> Investigate the Blickling Estate records (1830-1850) for mention of Robert Miller's tenancy.
+                    </li>
+                    <li style="margin-bottom: 15px; border-left: 2px solid #ccc; padding-left: 20px;">
+                        <span class="label-mono">Priority 2</span>
+                        <strong>DNA Triangulation:</strong> Check matches against descendants of the Howlett branch in Suffolk to confirm the 1838 marriage link.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div>
+            &copy; 2024 Farnham Ancestry / Forensic Genealogy.<br>
+            All records cited are available upon request as high-resolution scans.
+        </div>
+        <div>
+            Case Status: <span style="color: #000; font-weight: bold;">COMPLETE</span>
+        </div>
+    </footer>
+
+</body>
+</html>
