@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farnham Ancestry | Family Tree Finder & Heritage Index</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --fg: #000000;
+            --line: #000000;
+            --line-soft: #e5e5e5;
+            --font-main: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg);
+            color: var(--fg);
+            line-height: 1.4;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HEADER --- */
+        header {
+            border-bottom: 1px solid var(--line);
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 54px;
+            padding: 0 20px;
+        }
+
+        .brand {
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--fg);
+        }
+
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--fg);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Burger Menu */
+        .burger { display: none; cursor: pointer; background: none; border: none; padding: 10px; }
+        .burger div { width: 20px; height: 1px; background: var(--fg); margin: 5px 0; transition: 0.3s; }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 54px; left: 0; width: 100%; height: 100vh;
+            background: var(--bg);
+            display: none;
+            flex-direction: column;
+            padding: 40px;
+            gap: 24px;
+            z-index: 999;
+            border-top: 1px solid var(--line);
+        }
+        .mobile-overlay.active { display: flex; }
+        .mobile-overlay a { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; text-decoration: none; color: var(--fg); }
+
+        /* --- MANIFESTO / INTRO --- */
+        .manifesto {
+            border-bottom: 1px solid var(--line);
+            padding: 80px 20px;
+        }
+
+        .manifesto-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .manifesto h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-top: 10px;
+        }
+
+        .manifesto .lead-text {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .manifesto .sub-text {
+            font-size: 0.95rem;
+            opacity: 0.7;
+            line-height: 1.6;
+        }
+
+        /* --- CALL TO ACTION CENTER (HERO) --- */
+        .cta-center {
+            border-bottom: 1px solid var(--line);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .cta-box {
+            padding: 80px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .cta-box:first-child {
+            border-right: 1px solid var(--line);
+            background-color: var(--fg);
+            color: var(--bg);
+        }
+
+        .cta-box h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            margin-bottom: 20px;
+        }
+
+        .cta-box p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            max-width: 450px;
+            opacity: 0.9;
+        }
+
+        .label-mono {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .btn-big {
+            display: inline-block;
+            padding: 20px 40px;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-size: 1rem;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .btn-white { background: var(--bg); color: var(--fg); border: 1px solid var(--bg); }
+        .btn-white:hover { background: transparent; color: var(--bg); border: 1px solid var(--bg); }
+
+        .btn-black { background: var(--fg); color: var(--bg); border: 1px solid var(--fg); }
+        .btn-black:hover { background: transparent; color: var(--fg); }
+
+        /* --- THE MASTER INDEX (1000 Songs Style) --- */
+        .index-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .index-header {
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .index-header h3 { font-size: 0.8rem; text-transform: uppercase; font-family: var(--font-mono); font-weight: 900; }
+
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .col-title {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+            font-weight: 900;
+            color: #999;
+            border-bottom: 1px solid var(--line-soft);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+
+        .link-list { list-style: none; }
+        .link-list li { margin-bottom: 14px; }
+        .link-list a {
+            text-decoration: none;
+            color: var(--fg);
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #f2f2f2;
+            transition: 0.1s;
+        }
+        .link-list a:hover { border-color: var(--fg); color: #666; }
+        .link-list a span { font-family: var(--font-mono); font-size: 0.6rem; opacity: 0.4; margin-left: 10px; }
+
+        .tag-seo {
+            font-size: 0.6rem;
+            padding: 1px 4px;
+            border: 1px solid #ddd;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-left: 5px;
+            background: #000;
+            color: #fff;
+            opacity: 1 !important;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 60px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #888;
+        }
+        footer a { color: var(--fg); text-decoration: none; margin-left: 20px; font-weight: bold; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .cta-center { grid-template-columns: 1fr; }
+            .cta-box:first-child { border-right: none; border-bottom: 1px solid var(--line); }
+            .manifesto-grid { grid-template-columns: 1fr; gap: 20px; }
+            .directory-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .burger { display: block; }
+            .cta-box h2 { font-size: 2.5rem; }
+            .manifesto h2 { font-size: 2rem; }
+            .directory-grid { grid-template-columns: 1fr; }
+            footer { flex-direction: column; align-items: flex-start; gap: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="brand">FARNHAM ANCESTRY</a>
+            <nav class="nav-links">
+                <a href="#finder">Tree Finder</a>
+                <a href="#digital">Digital Shop</a>
+                <a href="blog.html">Blog</a>
+                <a href="mailto:hello@farnhamancestry.com" style="border: 1px solid #000; padding: 4px 10px;">Free 20m Call</a>
+            </nav>
+            <button class="burger" id="burgerBtn">
+                <div></div><div></div><div></div>
+            </button>
+        </div>
+    </header>
+
+    <div class="mobile-overlay" id="mobileMenu">
+        <a href="#finder">Tree Finder</a>
+        <a href="#digital">Digital Shop</a>
+        <a href="blog.html">Research Blog</a>
+        <a href="mailto:hello@farnhamancestry.com">Book Free Call</a>
+    </div>
+
+    <!-- INTRO / MANIFESTO BLOCK -->
+    <section class="manifesto">
+        <div class="manifesto-grid">
+            <div>
+                <span class="label-mono">The Approach</span>
+                <h2>Genealogy is more than <br>just clicking hints.</h2>
+            </div>
+            <div>
+                <p class="lead-text">
+                    Farnham Ancestry was built for those who have reached the end of the automated "leaf." We provide systematic, evidence-linked research that treats your family history like a forensic investigation.
+                </p>
+                <p class="sub-text">
+                    Whether it's unpicking East Anglian manorial records, tracing military service through the Great War, or resolving DNA matches that don't seem to add up, our goal is to move you past the "Brick Wall" and into a documented reality. Every discovery is backed by standard citations and high-resolution record retrieval.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRIMARY ACTION CENTER -->
+    <section class="cta-center">
+        <!-- PROMINENT FREE CALL -->
+        <div class="cta-box">
+            <span class="label-mono">Entry Point</span>
+            <h2>Free 20m Research Review</h2>
+            <p>Stuck at a brick wall? Send me your roadblock and we'll spend 20 minutes on a strategy call to find the records you're missing.</p>
+            <div>
+                <a href="mailto:hello@farnhamancestry.com" class="btn-big btn-white">Book Free Session &rarr;</a>
+            </div>
+        </div>
+        <!-- FIXED PRICE SPRINT -->
+        <div class="cta-box">
+            <span class="label-mono">Standard Package</span>
+            <h2 style="color:var(--fg);">2-Hour Research Sprint</h2>
+            <p>Professional record retrieval and family tree construction. High-density reporting with full citations.</p>
+            <div style="margin-bottom: 25px;">
+                <span style="font-size: 2.5rem; font-weight: 900;">£60.00</span>
+                <span style="font-family: var(--font-mono); font-size: 0.8rem; display: block; opacity: 0.6;">£30.00 PER HOUR</span>
+            </div>
+            <div>
+                <a href="mailto:hello@farnhamancestry.com" class="btn-big btn-black">Order Research Sprint</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- MASTER DIRECTORY INDEX -->
+    <main class="index-container">
+        
+        <div class="index-header">
+            <h3>Farnham Ancestry / Master Index</h3>
+            <span class="label-mono">Ver. 2.4.2</span>
+        </div>
+
+        <div class="directory-grid">
+            
+            <!-- COLUMN: FAMILY TREE FINDER -->
+            <div class="category" id="finder">
+                <h4 class="col-title">Family Tree Finder</h4>
+                <ul class="link-list">
+                    <li><a href="#">Break a Brick Wall <span>FIND-01</span></a></li>
+                    <li><a href="8greatsdnagrouping.html">Interactive 8-Greats DNA <span class="tag-seo">NEW</span><span>FIND-02</span></a></li>
+                    <li><a href="#">Military Service Trace <span>FIND-03</span></a></li>
+                    <li><a href="#">Parish Register Analysis <span>FIND-04</span></a></li>
+                    <li><a href="#">Probate & Will Records <span>FIND-05</span></a></li>
+                </ul>
+            </div>
+
+            <!-- COLUMN: DIGITAL PRODUCTS -->
+            <div class="category" id="digital">
+                <h4 class="col-title">Digital Heritage Shop</h4>
+                <ul class="link-list">
+                    <li><a href="housethroughtime2.html">House Through Time Dossier <span class="tag-seo">NEW</span><span>PRD-01</span></a></li>
+                    <li><a href="#">Printable Pedigree Chart <span>PRD-02</span></a></li>
+                    <li><a href="#">WikiTree Helper Scripts <span>PRD-03</span></a></li>
+                    <li><a href="#">Custom Ancestry Maps <span>PRD-04</span></a></li>
+                    <li><a href="#">Archive Scanning Strategy <span>PRD-05</span></a></li>
+                </ul>
+            </div>
+
+            <!-- COLUMN: BLOG / METHODOLOGY -->
+            <div class="category" id="blog">
+                <h4 class="col-title">Research Methodology</h4>
+                <ul class="link-list">
+                    <li><a href="report-template.html">Sample Research Report <span class="tag-seo">TEMPLATE</span><span>LOG-00</span></a></li>
+                    <li><a href="blog.html">The Research Blog Index <span>LOG-01</span></a></li>
+                    <li><a href="blog.html">The Norfolk 'Ag Lab' Study <span>LOG-02</span></a></li>
+                    <li><a href="blog.html">DNA Triangulation Guide <span>LOG-03</span></a></li>
+                    <li><a href="blog.html">Victorian Workhouse Data <span>LOG-04</span></a></li>
+                </ul>
+            </div>
+
+            <!-- COLUMN: SURNAMES & LOCATIONS -->
+            <div class="category">
+                <h4 class="col-title">Surnames & Regions</h4>
+                <ul class="link-list">
+                    <li><a href="#">Norfolk Family Index <span>LOC-01</span></a></li>
+                    <li><a href="#">Suffolk Lineage Search <span>LOC-02</span></a></li>
+                    <li><a href="#">The Farnham Surname <span>SUR-01</span></a></li>
+                    <li><a href="#">The Miller Surname <span>SUR-02</span></a></li>
+                    <li><a href="#">Manorial Record Index <span>LOC-03</span></a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- EXTERNAL COMMUNITY -->
+        <div class="index-header">
+            <h3>Community Connections</h3>
+            <span class="label-mono">External Repositories</span>
+        </div>
+        <div class="directory-grid">
+            <div class="category">
+                <h4 class="col-title">Open Source Tools</h4>
+                <ul class="link-list">
+                    <li><a href="https://github.com/farnhamancestry-ux/familytreefinder">My GitHub Repository <span>EXT-01</span></a></li>
+                    <li><a href="#">WikiTree Profile <span>EXT-02</span></a></li>
+                    <li><a href="#">Ancestry DNA Tutorials <span>EXT-03</span></a></li>
+                </ul>
+            </div>
+            <div class="category">
+                <h4 class="col-title">Professional</h4>
+                <ul class="link-list">
+                    <li><a href="#">LinkedIn Profile <span>PRO-01</span></a></li>
+                    <li><a href="#">Society of Genealogists <span>PRO-02</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div>
+            &copy; 2024 Farnham Ancestry / Family Tree Finder.<br>
+            Systematic heritage research for the digital age.
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/farnhamancestry-ux/familytreefinder">GitHub</a>
+            <a href="#">WikiTree</a>
+            <a href="mailto:hello@farnhamancestry.com">Contact</a>
+        </div>
+    </footer>
+
+    <script>
+        const burgerBtn = document.getElementById('burgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        burgerBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            burgerBtn.querySelectorAll('div').forEach((d, i) => {
+                if(mobileMenu.classList.contains('active')) {
+                    if(i===0) d.style.transform = "rotate(45deg) translate(4px, 4px)";
+                    if(i===1) d.style.opacity = "0";
+                    if(i===2) d.style.transform = "rotate(-45deg) translate(4px, -4px)";
+                } else {
+                    d.style.transform = "none";
+                    d.style.opacity = "1";
+                }
+            });
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        });
+    </script>
+</body>
+</html>
