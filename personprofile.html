@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legacy Portrait | Farnham Ancestry Archive</title>
+    
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #111111;
+            --text-light: #666666;
+            --line: #e5e5e5;
+            --accent: #000000;
+            --gold: #b59358;
+            --paper: #fcfaf7;
+            --ink: #1a1a1a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+        /* Branding Header */
+        header {
+            border-bottom: 2px solid var(--accent);
+            padding: 30px 0;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .brand h1 { font-size: 2.8rem; font-weight: 800; letter-spacing: -2px; line-height: 0.9; }
+        .brand p { font-size: 0.9rem; color: var(--gold); text-transform: uppercase; letter-spacing: 3px; margin-top: 10px; font-weight: 700; }
+
+        .btn-print {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            margin-bottom: 60px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            color: var(--gold);
+            display: block;
+        }
+
+        .timeline-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 0;
+            padding: 20px 0;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .timeline-item {
+            min-width: 280px;
+            flex: 0 0 auto;
+            border-left: 1px solid var(--line);
+            padding: 0 30px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -5px;
+            width: 9px;
+            height: 9px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .timeline-year { font-weight: 800; font-size: 1.4rem; margin-bottom: 5px; }
+        .timeline-event { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+        .timeline-desc { font-size: 0.85rem; color: var(--text-light); line-height: 1.4; }
+
+        /* Cabinet Card Portrait Style */
+        .profile-hero {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .cabinet-card {
+            background: #e0d8c8;
+            padding: 15px 15px 80px 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            border: 1px solid #d4ccba;
+            position: relative;
+            transform: rotate(-1deg);
+        }
+        
+        .portrait-wrapper {
+            width: 100%;
+            aspect-ratio: 4/5;
+            overflow: hidden;
+            background: #000;
+            border: 1px solid rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        /* Grainy overlay for photo authenticity */
+        .portrait-wrapper::after {
+            content: '';
+            position: absolute;
+            top:0; left:0; width:100%; height:100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .portrait-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Classic Ag-Lab Photo Aesthetic: High Contrast, Gritty, Sepia-Dark */
+            filter: sepia(0.6) contrast(1.4) brightness(0.7) grayscale(0.5);
+        }
+
+        .card-stamp {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-family: "Palatino", "Georgia", serif;
+            color: #5d5446;
+            opacity: 0.7;
+        }
+
+        .card-stamp h4 { font-size: 1.4rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 400; margin: 0; }
+        .card-stamp p { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .vitals-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--line);
+            border: 1px solid var(--line);
+            height: fit-content;
+        }
+
+        .vital-item { background: white; padding: 20px; }
+        .vital-item span:first-child { display: block; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; color: var(--text-light); margin-bottom: 5px; }
+        .vital-item span:last-child { font-size: 1rem; font-weight: 700; }
+
+        /* Records Index Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 100px;
+        }
+
+        .record-card {
+            border: 1px solid var(--line);
+            padding: 40px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #fff;
+            position: relative;
+        }
+
+        .record-card:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .record-card h3 { font-size: 1.6rem; line-height: 1.1; margin-bottom: 10px; }
+        .record-card p { font-size: 0.75rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Dossier Detail Overlay */
+        #dossier-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .close-btn { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-bottom: 40px; display: inline-block; padding: 10px; border: 1px solid var(--line); }
+        
+        .dossier-tabs { display: flex; gap: 30px; border-bottom: 1px solid var(--line); margin-bottom: 40px; }
+        .tab-btn { background: none; border: none; padding: 10px 0; font-weight: 800; text-transform: uppercase; font-size: 0.75rem; cursor: pointer; color: var(--text-light); border-bottom: 2px solid transparent; }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        .pane { display: none; }
+        .pane.active { display: block; animation: fadeIn 0.4s ease; }
+
+        /* Archive Documents */
+        .archive-doc { background: var(--paper); border: 1px solid #dcd3c1; padding: 40px; font-family: "Courier New", Courier, monospace; overflow-x: auto; }
+        .archive-doc table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .archive-doc th { text-align: left; border-bottom: 2px solid #000; padding-bottom: 15px; font-size: 0.7rem; }
+        .archive-doc td { padding: 12px 5px; font-size: 0.85rem; border-bottom: 1px dotted #bbb; }
+
+        .story-text { font-family: "Georgia", serif; font-size: 1.25rem; line-height: 1.8; max-width: 800px; color: var(--ink); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* PRINT SETTINGS */
+        @media print {
+            @page { margin: 1.5cm; size: A4; }
+            nav, .btn-print, .close-btn, .dossier-tabs, #index-section { display: none !important; }
+            body { background: white; }
+            .container { max-width: 100%; padding: 0; }
+            #dossier-overlay { display: block !important; position: static !important; padding: 0 !important; }
+            .dossier-chapter { page-break-before: always; margin-top: 40px; padding-top: 40px; border-top: 1px solid black; }
+            .pane { display: block !important; margin-bottom: 50px; page-break-inside: avoid; }
+            .timeline-container { overflow: visible; flex-wrap: wrap; }
+            .timeline-item { page-break-inside: avoid; margin-bottom: 30px; }
+        }
+
+        @media (min-width: 768px) {
+            .profile-hero { grid-template-columns: 0.7fr 1.3fr; }
+            .brand h1 { font-size: 3.5rem; }
+            .container { padding: 80px 100px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="brand">
+            <h1 id="ancestor-name-heading">James Miller</h1>
+            <p>Heritage Portrait Portfolio</p>
+        </div>
+        <button class="btn-print" onclick="window.print()">Print Mini Book</button>
+    </header>
+
+    <section class="timeline-section">
+        <span class="section-label">A Life in Sequence</span>
+        <div class="timeline-container" id="main-timeline"></div>
+    </section>
+
+    <section class="profile-hero">
+        <div class="cabinet-card">
+            <div class="portrait-wrapper">
+                <!-- A portrait of an 19th century worker: Rough vest, stern face, grainy texture -->
+                <img id="portrait-main" src="https://images.pexels.com/photos/191240/pexels-photo-191240.jpeg" alt="Historical Portrait" class="portrait-img">
+            </div>
+            <div class="card-stamp">
+                <h4>Miller</h4>
+                <p>NORWICH PORTRAIT GALLERY &bull; 1888</p>
+            </div>
+        </div>
+        <div class="vitals-grid">
+            <div class="vital-item"><span>Full Name</span><span id="stat-name">James Miller</span></div>
+            <div class="vital-item"><span>Born</span><span id="stat-birth">14 April 1842</span></div>
+            <div class="vital-item"><span>Primary Trade</span><span id="stat-job">Agricultural Labourer</span></div>
+            <div class="vital-item"><span>Death</span><span id="stat-death">12 Nov 1912</span></div>
+            <div class="vital-item"><span>Lineage</span><span id="stat-parents">Miller / Finch</span></div>
+            <div class="vital-item"><span>Residences</span><span id="stat-loc">Norfolk, Norwich</span></div>
+            <div class="vital-item"><span>Literacy</span><span id="stat-lit">Marked with 'X' (1865)</span></div>
+            <div class="vital-item"><span>Folio Ref</span><span id="stat-id">FA-MIL-1842</span></div>
+        </div>
+    </section>
+
+    <section id="index-section">
+        <span class="section-label">Census Archive (1851 - 1901)</span>
+        <div class="grid" id="records-grid"></div>
+    </section>
+
+    <div id="dossier-overlay">
+        <div class="close-btn" onclick="closeDossier()">Close Archive File</div>
+        <div id="dossier-render-target"></div>
+    </div>
+
+    <footer style="margin-top: 100px; padding: 60px 0; border-top: 1px solid var(--line); text-align: center; color: var(--text-light); font-size: 0.8rem;">
+        &copy; 2024 Farnham Ancestry &bull; Heritage Portfolios &bull; Digital & Print Editions
+    </footer>
+</div>
+
+<script>
+    const timelineData = [
+        { year: "1842", event: "Birth", desc: "Born in Saham Toney, Norfolk." },
+        { year: "1851", event: "Entry into Work", desc: "First appeared in census as a 'Plough Boy' at age 9." },
+        { year: "1865", event: "Marriage", desc: "Married Martha Finch in Wayland District." },
+        { year: "1885", event: "The Migration", desc: "Moved from rural Norfolk to industrial Norwich." },
+        { year: "1912", event: "Death", desc: "Passed away age 70 in Norwich." }
+    ];
+
+    const recordsData = [
+        {
+            id: 1,
+            name: "The Life Narrative",
+            category: "BIOGRAPHY",
+            subtitle: "Heritage Profile",
+            story: "James Miller’s story is the story of the Victorian working man. Born into a lineage of farmhands, James was part of the generation that left the rural agricultural belt for the industrial fringes. His transition from an Agricultural Labourer to a Brewery Carter shows the resilience and adaptability of the working class during a century of monumental change.",
+            census: [
+                {n: "James Miller", r: "Head", a: "29", o: "Ag. Labourer"},
+                {n: "Martha Miller", r: "Wife", a: "27", o: "-"}
+            ]
+        },
+        {
+            id: 2,
+            name: "1851: Childhood",
+            category: "CENSUS ARCHIVE",
+            subtitle: "Saham Toney, Norfolk",
+            story: "At age 9, James is already out of school and working the land. This record captures his family home before the great shifts of the 19th century.",
+            census: [
+                {n: "William Miller", r: "Head", a: "40", o: "Ag. Labourer"},
+                {n: "Sarah Miller", r: "Wife", a: "38", o: "-"},
+                {n: "James Miller", r: "Son", a: "9", o: "Plough Boy"},
+                {n: "George Miller", r: "Son", a: "5", o: "Scholar"}
+            ]
+        },
+        {
+            id: 3,
+            name: "1861: Young Adult",
+            category: "CENSUS ARCHIVE",
+            subtitle: "Watton, Norfolk",
+            story: "By 1861, James has graduated from Plough Boy to a fully-fledged Agricultural Labourer. He is still living at home, contributing to his parents' household income.",
+            census: [
+                {n: "William Miller", r: "Head", a: "50", o: "Ag. Labourer"},
+                {n: "Sarah Miller", r: "Wife", a: "48", o: "-"},
+                {n: "James Miller", r: "Son", a: "19", o: "Ag. Labourer"}
+            ]
+        },
+        {
+            id: 4,
+            name: "1871: The Early Marriage",
+            category: "CENSUS ARCHIVE",
+            subtitle: "Watton, Norfolk",
+            story: "Now married with his own young family, James is supporting a wife and two children on the wages of a farm labourer.",
+            census: [
+                {n: "James Miller", r: "Head", a: "29", o: "Ag. Labourer"},
+                {n: "Martha Miller", r: "Wife", a: "27", o: "Lace Maker"},
+                {n: "William Miller", r: "Son", a: "5", o: "Scholar"},
+                {n: "Mary Miller", r: "Daughter", a: "2", o: "-"}
+            ]
+        },
+        {
+            id: 5,
+            name: "1881: The Urban Move",
+            category: "CENSUS ARCHIVE",
+            subtitle: "St. Benedicts, Norwich",
+            story: "The shift has happened. James has moved his family to the city. The living conditions are more cramped, but the work is steadier.",
+            census: [
+                {n: "James Miller", r: "Head", a: "39", o: "Gen. Labourer"},
+                {n: "Martha Miller", r: "Wife", a: "37", o: "Charwoman"},
+                {n: "William Miller", r: "Son", a: "15", o: "Errand Boy"},
+                {n: "Arthur Miller", r: "Son", a: "1", o: "-"}
+            ]
+        },
+        {
+            id: 6,
+            name: "1891: The Brewery Carter",
+            category: "CENSUS ARCHIVE",
+            subtitle: "Heigham, Norwich",
+            story: "James has secured a role as a Carter. This was a trusted position involving the handling of horse teams for the local brewery.",
+            census: [
+                {n: "James Miller", r: "Head", a: "49", o: "Carter (Brewery)"},
+                {n: "Martha Miller", r: "Wife", a: "47", o: "-"},
+                {n: "Arthur Miller", r: "Son", a: "11", o: "Scholar"}
+            ]
+        },
+        {
+            id: 7,
+            name: "1901: Final Records",
+            category: "CENSUS ARCHIVE",
+            subtitle: "Catton, Norwich",
+            story: "In the final census before his death, James is still active. His children are now working in skilled urban trades like printing.",
+            census: [
+                {n: "James Miller", r: "Head", a: "59", o: "Carter"},
+                {n: "Martha Miller", r: "Wife", a: "57", o: "-"},
+                {n: "Arthur Miller", r: "Son", a: "21", o: "Printer"}
+            ]
+        }
+    ];
+
+    function init() {
+        const timeline = document.getElementById('main-timeline');
+        timelineData.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'timeline-item';
+            div.innerHTML = `
+                <div class="timeline-year">${item.year}</div>
+                <div class="timeline-event">${item.event}</div>
+                <div class="timeline-desc">${item.desc}</div>
+            `;
+            timeline.appendChild(div);
+        });
+
+        const grid = document.getElementById('records-grid');
+        recordsData.forEach(r => {
+            const card = document.createElement('div');
+            card.className = 'record-card';
+            card.innerHTML = `<p>${r.category}</p><h3>${r.name}</h3><p style="color:var(--text-light);">${r.subtitle}</p>`;
+            card.onclick = () => openDossier(r.id);
+            grid.appendChild(card);
+        });
+    }
+
+    function openDossier(id) {
+        const r = recordsData.find(d => d.id === id);
+        const target = document.getElementById('dossier-render-target');
+        
+        target.innerHTML = `
+            <div class="dossier-chapter">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;">
+                    <h2 style="font-size:3rem; line-height:1;">${r.name}</h2>
+                    <span style="font-weight:800; color:var(--gold);">${r.subtitle}</span>
+                </div>
+                <p class="section-label" style="margin-bottom:30px;">${r.category}</p>
+
+                <div class="dossier-tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'story', ${r.id})">The Narrative</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'data', ${r.id})">Source Data</button>
+                </div>
+
+                <div id="pane-story-${r.id}" class="pane active">
+                    <div class="story-text">${r.story}</div>
+                </div>
+
+                <div id="pane-data-${r.id}" class="pane">
+                    <div class="archive-doc">
+                        <table>
+                            <thead><tr><th>NAME</th><th>RELATION</th><th>AGE</th><th>OCCUPATION</th></tr></thead>
+                            <tbody>
+                                ${r.census.map(c => `<tr><td>${c.n}</td><td>${c.r}</td><td>${c.a}</td><td>${c.o}</td></tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('dossier-overlay').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function switchTab(e, type, id) {
+        const chapter = document.querySelector('.dossier-chapter');
+        chapter.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+        chapter.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`pane-${type}-${id}`).classList.add('active');
+        e.currentTarget.classList.add('active');
+    }
+
+    function closeDossier() {
+        document.getElementById('dossier-overlay').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    window.onload = init;
+</script>
+
+</body>
+</html>
